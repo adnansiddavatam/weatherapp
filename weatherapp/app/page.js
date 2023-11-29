@@ -9,7 +9,7 @@ const WeatherApp = () => {
   const getWeather = () => {
     setError(''); // Reset error message
     fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=883533507556126c37b751bd293ed4b2&units=imperial`
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=883533507556126c37b751bd293ed4b2&units=metric`
     )
       .then((res) => {
         if (!res.ok) {
@@ -48,8 +48,8 @@ const WeatherApp = () => {
       {weather && (
         <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-5">
           <h2 className="text-xl mb-2">{weather.name}</h2>
-          <p className="text-gray-700 text-base">Temperature: {weather.main?.temp} °F</p>
-          <p className="text-gray-700 text-base">Feels Like: {weather.main?.feels_like} °F</p>
+          <p className="text-gray-700 text-base">Temperature: {weather.main?.temp} °C</p>
+          <p className="text-gray-700 text-base">Feels Like: {weather.main?.feels_like} °C</p>
           <p className="text-gray-700 text-base">Humidity: {weather.main?.humidity}%</p>
         </div>
       )}
