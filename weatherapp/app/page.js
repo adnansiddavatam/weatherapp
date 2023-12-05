@@ -6,29 +6,56 @@ const WeatherApp = () => {
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState('');
 
-  const getWeather = () => {
+  // Fetch weather data by city name
+  const getWeatherByCity = (cityName) => {
     setError(''); // Reset error message
-    navigator.geolocation.getCurrentPosition((position) => {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-      fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=883533507556126c37b751bd293ed4b2&units=metric`
-      )
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error('Invalid location');
-          }
-          return res.json();
-        })
-        .then((data) => {
-          setWeather(data);
-          setError(''); // Reset error message if successful
-        })
-        .catch((error) => {
-          setError("Please enter a valid location");
-          setWeather(null); // Reset weather data
-        });
-    });
+    fetch(
+      `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=883533507556126c37b751bd293ed4b2&units=metric`
+    )
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('City not found');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setWeather(data);
+        setError(''); // Reset error message if successful
+      })
+      .catch((error) => {
+        setError("Please enter a valid city name");
+        setWeather(null); // Reset weather data
+      });
+  };
+
+  // Fetch weather data based on geolocation or city name
+  const getWeather = () => {
+    if (city) {
+      getWeatherByCity(city);
+    } else {
+      setError(''); // Reset error message
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=883533507556126c37b751bd293ed4b2&units=metric`
+        )
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error('Invalid location');
+            }
+            return res.json();
+          })
+          .then((data) => {
+            setWeather(data);
+            setError(''); // Reset error message if successful
+          })
+          .catch((error) => {
+            setError("Please enter a valid location");
+            setWeather(null); // Reset weather data
+          });
+      });
+    }
   };
 
   useEffect(() => {
