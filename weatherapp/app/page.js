@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const WeatherApp = () => {
   const [city, setCity] = useState('');
@@ -8,24 +8,32 @@ const WeatherApp = () => {
 
   const getWeather = () => {
     setError(''); // Reset error message
-    fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=883533507556126c37b751bd293ed4b2&units=metric`
-    )
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Invalid location');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setWeather(data);
-        setError(''); // Reset error message if successful
-      })
-      .catch((error) => {
-        setError("Please enter a valid location");
-        setWeather(null); // Reset weather data
-      });
+    navigator.geolocation.getCurrentPosition((position) => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      fetch(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=883533507556126c37b751bd293ed4b2&units=metric`
+      )
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Invalid location');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          setWeather(data);
+          setError(''); // Reset error message if successful
+        })
+        .catch((error) => {
+          setError("Please enter a valid location");
+          setWeather(null); // Reset weather data
+        });
+    });
   };
+
+  useEffect(() => {
+    getWeather();
+  }, []); // Empty dependency array means this effect runs once on mount
 
   return (
     <div className="min-h-screen bg-gray-200 flex flex-col items-center justify-center p-5">
