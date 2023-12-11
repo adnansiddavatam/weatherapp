@@ -71,6 +71,7 @@ const WeatherApp = () => {
           value={city}
           onChange={(e) => setCity(e.target.value)}
           className="shadow appearance-none border rounded py-2 px-3 text-grey-darker mr-2"
+          style={{ color: 'black' }}
         />
         <button 
           onClick={getWeather}
@@ -82,7 +83,7 @@ const WeatherApp = () => {
       {error && <p className="text-red-500">{error}</p>}
       {weather && (
         <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-5">
-          <h2 className="text-xl mb-2">{weather.name}</h2>
+          <h2 className="text-xl mb-2" style={{ color: 'black' }}>{weather.name}</h2>
           <p className="text-gray-700 text-base">Temperature: {weather.main?.temp} °C</p>
           <p className="text-gray-700 text-base">Feels Like: {weather.main?.feels_like} °C</p>
           <p className="text-gray-700 text-base">Humidity: {weather.main?.humidity}%</p>
